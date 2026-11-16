@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: ctscreener-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ctscreener
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: ctscreener-app
+    ports:
+      - "8080:8080"
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/ctscreener
+      JWT_SECRET: change-me-in-production-32-chars!!
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  mongo_data:

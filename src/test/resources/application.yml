@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: clinical-trial-screener-test
+  data:
+    mongodb:
+      auto-index-creation: true
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 7.0.4
+
+app:
+  jwt:
+    secret: testsecretkey32charsminimumhereXX
+    expiration-ms: 3600000
